@@ -1,16 +1,10 @@
-import React from 'react';
+import LandingPage from "./pages/LandingPage";
+import GithubConnection from "./pages/GithubConnection";
 
 export default function App() {
- 
-  return (
- <>
- <h1 className='text-[30px] text-center'>Hallo my team</h1>
- <h1 className='text-[30px] text-center'>Hallo my team</h1>
- <h1 className='text-[30px] text-center'>Hallo my team</h1>
- <h1 className='text-[30px] text-center'>Hallo my team</h1>
- <h1 className='text-[30px] text-center'>Hallo my team</h1>
- <h1 className='text-[30px] text-center'>Hallo my team</h1>
- </>
+  if (window.location.pathname === "/connect") {
+    return <GithubConnection />;
+  }
 
-  );
+  return <LandingPage />;
 }
