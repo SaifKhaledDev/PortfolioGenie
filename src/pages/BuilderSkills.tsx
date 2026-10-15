@@ -1,7 +1,62 @@
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes, faCircleInfo, faPlus, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 function BuilderSkills() {
+    // State for selected skills categorized by type
+    const [languages, setLanguages] = useState<string[]>(['TypeScript', 'Python', 'JavaScript']);
+    const [frameworks, setFrameworks] = useState<string[]>(['React', 'Node.js']);
+    const [tools, setTools] = useState<string[]>(['Git']);
+
+    // State for custom input values
+    const [newLanguage, setNewLanguage] = useState('');
+    const [newFramework, setNewFramework] = useState('');
+    const [newTool, setNewTool] = useState('');
+
+    // Handlers for adding custom skills
+    const handleAddLanguage = () => {
+        if (newLanguage.trim() && !languages.includes(newLanguage.trim())) {
+            setLanguages([...languages, newLanguage.trim()]);
+            setNewLanguage('');
+        }
+    };
+
+    const handleAddFramework = () => {
+        if (newFramework.trim() && !frameworks.includes(newFramework.trim())) {
+            setFrameworks([...frameworks, newFramework.trim()]);
+            setNewFramework('');
+        }
+    };
+
+    const handleAddTool = () => {
+        if (newTool.trim() && !tools.includes(newTool.trim())) {
+            setTools([...tools, newTool.trim()]);
+            setNewTool('');
+        }
+    };
+
+    // Handlers for adding suggested skills
+    const handleAddSuggested = (skill: string, type: 'languages' | 'frameworks' | 'tools') => {
+        if (type === 'languages' && !languages.includes(skill)) {
+            setLanguages([...languages, skill]);
+        } else if (type === 'frameworks' && !frameworks.includes(skill)) {
+            setFrameworks([...frameworks, skill]);
+        } else if (type === 'tools' && !tools.includes(skill)) {
+            setTools([...tools, skill]);
+        }
+    };
+
+    // Handlers for removing selected skills
+    const handleRemoveSkill = (skillToRemove: string, type: 'languages' | 'frameworks' | 'tools') => {
+        if (type === 'languages') {
+            setLanguages(languages.filter((s) => s !== skillToRemove));
+        } else if (type === 'frameworks') {
+            setFrameworks(frameworks.filter((s) => s !== skillToRemove));
+        } else if (type === 'tools') {
+            setTools(tools.filter((s) => s !== skillToRemove));
+        }
+    };
+
     return (
         <div className="w-full min-h-screen bg-[var(--color-bg-app)]">
 
@@ -111,26 +166,17 @@ function BuilderSkills() {
 
                         {/* Selected Badges */}
                         <div className="flex flex-wrap gap-2.5">
-                            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-violet-primary)] text-white text-sm font-medium">
-                                TypeScript
-                                <button className="hover:opacity-80 cursor-pointer">
-                                    <FontAwesomeIcon icon={faTimes} className="text-xs" />
-                                </button>
-                            </span>
-
-                            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-violet-primary)] text-white text-sm font-medium">
-                                Python
-                                <button className="hover:opacity-80 cursor-pointer">
-                                    <FontAwesomeIcon icon={faTimes} className="text-xs" />
-                                </button>
-                            </span>
-
-                            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-violet-primary)] text-white text-sm font-medium">
-                                JavaScript
-                                <button className="hover:opacity-80 cursor-pointer">
-                                    <FontAwesomeIcon icon={faTimes} className="text-xs" />
-                                </button>
-                            </span>
+                            {languages.map((skill) => (
+                                <span key={skill} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-violet-primary)] text-white text-sm font-medium">
+                                    {skill}
+                                    <button 
+                                        onClick={() => handleRemoveSkill(skill, 'languages')}
+                                        className="hover:opacity-80 cursor-pointer"
+                                    >
+                                        <FontAwesomeIcon icon={faTimes} className="text-xs" />
+                                    </button>
+                                </span>
+                            ))}
                         </div>
 
                         {/* Suggested Section */}
@@ -139,20 +185,20 @@ function BuilderSkills() {
                                 Detected from your repositories. Tap to add.
                             </p>
                             <div className="flex flex-wrap gap-2.5">
-                                <button className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    Go · 8% of your code
-                                </button>
-
-                                <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    HTML/CSS · 8% of your code
-                                </button>
-
-                                <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    Shell · 4% of your code
-                                </button>
+                                {[
+                                    { name: 'Go', info: '8% of your code' },
+                                    { name: 'HTML/CSS', info: '8% of your code' },
+                                    { name: 'Shell', info: '4% of your code' }
+                                ].map((item) => (
+                                    <button 
+                                        key={item.name}
+                                        onClick={() => handleAddSuggested(item.name, 'languages')}
+                                        className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer"
+                                    >
+                                        <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
+                                        {item.name} · {item.info}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
@@ -160,10 +206,16 @@ function BuilderSkills() {
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                             <input
                                 type="text"
+                                value={newLanguage}
+                                onChange={(e) => setNewLanguage(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleAddLanguage()}
                                 placeholder="Add another"
                                 className="flex-1 px-4 py-2.5 border border-[var(--color-border)] rounded-xl text-sm placeholder-[var(--color-slate-500-light)] text-[var(--color-text-main)] outline-none focus:border-[var(--color-violet-primary)] transition-colors bg-[var(--color-bg-card)]"
                             />
-                            <button className="flex items-center justify-center gap-2 px-5 py-2.5 border border-[var(--color-border)] rounded-xl text-sm font-medium text-[var(--color-text-main)] hover:bg-[var(--color-slate-50-bg)] transition-colors cursor-pointer">
+                            <button 
+                                onClick={handleAddLanguage}
+                                className="flex items-center justify-center gap-2 px-5 py-2.5 border border-[var(--color-border)] rounded-xl text-sm font-medium text-[var(--color-text-main)] hover:bg-[var(--color-slate-50-bg)] transition-colors cursor-pointer"
+                            >
                                 <FontAwesomeIcon icon={faPlus} className="text-xs" />
                                 Add
                             </button>
@@ -178,19 +230,17 @@ function BuilderSkills() {
 
                         {/* Selected Badges */}
                         <div className="flex flex-wrap gap-2.5">
-                            <span className="`inline-flex` items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-violet-primary)] text-white text-sm font-medium">
-                                React
-                                <button className="hover:opacity-80 cursor-pointer">
-                                    <FontAwesomeIcon icon={faTimes} className="text-xs" />
-                                </button>
-                            </span>
-
-                            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-violet-primary)] text-white text-sm font-medium">
-                                Node.js
-                                <button className="hover:opacity-80 cursor-pointer">
-                                    <FontAwesomeIcon icon={faTimes} className="text-xs" />
-                                </button>
-                            </span>
+                            {frameworks.map((skill) => (
+                                <span key={skill} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-violet-primary)] text-white text-sm font-medium">
+                                    {skill}
+                                    <button 
+                                        onClick={() => handleRemoveSkill(skill, 'frameworks')}
+                                        className="hover:opacity-80 cursor-pointer"
+                                    >
+                                        <FontAwesomeIcon icon={faTimes} className="text-xs" />
+                                    </button>
+                                </span>
+                            ))}
                         </div>
 
                         {/* Suggested Section */}
@@ -199,25 +249,16 @@ function BuilderSkills() {
                                 Found in your project tags. Tap to add.
                             </p>
                             <div className="flex flex-wrap gap-2.5">
-                                <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    Next.js
-                                </button>
-
-                                <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    Express
-                                </button>
-
-                                <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    Tailwind CSS
-                                </button>
-
-                                <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    Prisma
-                                </button>
+                                {['Next.js', 'Express', 'Tailwind CSS', 'Prisma'].map((item) => (
+                                    <button 
+                                        key={item}
+                                        onClick={() => handleAddSuggested(item, 'frameworks')}
+                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer"
+                                    >
+                                        <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
+                                        {item}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
@@ -225,10 +266,16 @@ function BuilderSkills() {
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                             <input
                                 type="text"
+                                value={newFramework}
+                                onChange={(e) => setNewFramework(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleAddFramework()}
                                 placeholder="Add another"
                                 className="flex-1 px-4 py-2.5 border border-[var(--color-border)] rounded-xl text-sm placeholder-[var(--color-slate-500-light)] text-[var(--color-text-main)] outline-none focus:border-[var(--color-violet-primary)] transition-colors bg-[var(--color-bg-card)]"
                             />
-                            <button className="flex items-center justify-center gap-2 px-5 py-2.5 border border-[var(--color-border)] rounded-xl text-sm font-medium text-[var(--color-text-main)] hover:bg-[var(--color-slate-50-bg)] transition-colors cursor-pointer">
+                            <button 
+                                onClick={handleAddFramework}
+                                className="flex items-center justify-center gap-2 px-5 py-2.5 border border-[var(--color-border)] rounded-xl text-sm font-medium text-[var(--color-text-main)] hover:bg-[var(--color-slate-50-bg)] transition-colors cursor-pointer"
+                            >
                                 <FontAwesomeIcon icon={faPlus} className="text-xs" />
                                 Add
                             </button>
@@ -243,12 +290,17 @@ function BuilderSkills() {
 
                         {/* Selected Badges */}
                         <div className="flex flex-wrap gap-2.5">
-                            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-violet-primary)] text-white text-sm font-medium">
-                                Git
-                                <button className="hover:opacity-80 cursor-pointer">
-                                    <FontAwesomeIcon icon={faTimes} className="text-xs" />
-                                </button>
-                            </span>
+                            {tools.map((skill) => (
+                                <span key={skill} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--color-violet-primary)] text-white text-sm font-medium">
+                                    {skill}
+                                    <button 
+                                        onClick={() => handleRemoveSkill(skill, 'tools')}
+                                        className="hover:opacity-80 cursor-pointer"
+                                    >
+                                        <FontAwesomeIcon icon={faTimes} className="text-xs" />
+                                    </button>
+                                </span>
+                            ))}
                         </div>
 
                         {/* Suggested Section */}
@@ -257,25 +309,16 @@ function BuilderSkills() {
                                 Detected from your repositories. Tap to add.
                             </p>
                             <div className="flex flex-wrap gap-2.5">
-                                <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    Docker
-                                </button>
-
-                                <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    PostgreSQL
-                                </button>
-
-                                <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    SQLite
-                                </button>
-
-                                <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer">
-                                    <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
-                                    Vite
-                                </button>
+                                {['Docker', 'PostgreSQL', 'SQLite', 'Vite'].map((item) => (
+                                    <button 
+                                        key={item}
+                                        onClick={() => handleAddSuggested(item, 'tools')}
+                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[var(--color-slate-50-bg)] border border-dashed border-[var(--color-border)] text-[var(--color-text-main)] text-xs md:text-sm font-medium hover:bg-[var(--color-border)] transition-colors cursor-pointer"
+                                    >
+                                        <FontAwesomeIcon icon={faPlus} className="text-xs text-[var(--color-slate-500-light)]" />
+                                        {item}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
@@ -283,20 +326,25 @@ function BuilderSkills() {
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                             <input
                                 type="text"
+                                value={newTool}
+                                onChange={(e) => setNewTool(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleAddTool()}
                                 placeholder="Add another"
                                 className="flex-1 px-4 py-2.5 border border-[var(--color-border)] rounded-xl text-sm placeholder-[var(--color-slate-500-light)] text-[var(--color-text-main)] outline-none focus:border-[var(--color-violet-primary)] transition-colors bg-[var(--color-bg-card)]"
                             />
-                            <button className="flex items-center justify-center gap-2 px-5 py-2.5 border border-[var(--color-border)] rounded-xl text-sm font-medium text-[var(--color-text-main)] hover:bg-[var(--color-slate-50-bg)] transition-colors cursor-pointer">
+                            <button 
+                                onClick={handleAddTool}
+                                className="flex items-center justify-center gap-2 px-5 py-2.5 border border-[var(--color-border)] rounded-xl text-sm font-medium text-[var(--color-text-main)] hover:bg-[var(--color-slate-50-bg)] transition-colors cursor-pointer"
+                            >
                                 <FontAwesomeIcon icon={faPlus} className="text-xs" />
                                 Add
                             </button>
                         </div>
                     </div>
 
-
-
                 </div>
             </main>
+
             {/* Footer section */}
             <div className="w-full flex justify-between items-center pt-4 border-t border-[var(--color-border)] bg-[var(--color-white-pure)] py-5 px-7">
                 <button className="flex items-center gap-2 px-4 sm:px-7 py-3 border border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-main)] rounded-xl font-medium text-sm hover:bg-[var(--color-slate-50-bg)] transition-colors cursor-pointer">
@@ -304,7 +352,11 @@ function BuilderSkills() {
                     Back
                 </button>
 
-                <button className="flex items-center gap-2 px-6 py-3 bg-[var(--color-violet-primary)] text-white rounded-xl font-medium text-sm hover:bg-[var(--color-violet-hover)] transition-colors cursor-pointer shadow-sm">
+                <button
+                    onClick={() => {
+                        window.location.href = '/builder-contact';
+                    }}
+                    className="flex items-center gap-2 px-6 py-3 bg-[var(--color-violet-primary)] text-white rounded-xl font-medium text-sm hover:bg-[var(--color-violet-hover)] transition-colors cursor-pointer shadow-sm">
                     Next: Contact
                     <FontAwesomeIcon icon={faArrowRight} />
                 </button>
