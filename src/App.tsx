@@ -3,31 +3,31 @@ import { ProjectsDashboard } from "./pages/ProjectsDashboard";
 import { ProjectSelection } from "./pages/ProjectSelection";
 
 export default function App() {
-const [currentPage, setCurrentPage] = useState<"dashboard" | "selection">(
-"dashboard",
-);
+  const [currentPage, setCurrentPage] = useState<"dashboard" | "selection">(
+    "dashboard",
+  );
 
-const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]);
+  const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]);
 
-return (
-<>
-<div className={currentPage === "dashboard" ? "" : "hidden"}>
-<ProjectsDashboard
-onContinue={(selectedProjects) => {
-setSelectedProjectIds(selectedProjects.map((project) => project.id));
-setCurrentPage("selection");
-}}
-/> </div>
+  return (
+    <>
+      <div className={currentPage === "dashboard" ? "" : "hidden"}>
+        <ProjectsDashboard
+          onContinue={(selectedProjects) => {
+            setSelectedProjectIds(
+              selectedProjects.map((project) => project.id),
+            );
+            setCurrentPage("selection");
+          }}
+        />{" "}
+      </div>
 
-```
-  {currentPage === "selection" && (
-    <ProjectSelection
-      initialSelectedIds={selectedProjectIds}
-      onBack={() => setCurrentPage("dashboard")}
-    />
-  )}
-</>
-```
-
-);
+      {currentPage === "selection" && (
+        <ProjectSelection
+          initialSelectedIds={selectedProjectIds}
+          onBack={() => setCurrentPage("dashboard")}
+        />
+      )}
+    </>
+  );
 }
