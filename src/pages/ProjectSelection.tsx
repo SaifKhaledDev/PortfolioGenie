@@ -65,11 +65,13 @@ const projects: Project[] = [
 type ProjectsSelectionContentProps = {
   initialSelectedIds: string[];
   onBack?: () => void;
+  onContinue?: (selectedIds: string[]) => void;
 };
 
 export function ProjectsSelectionContent({
   initialSelectedIds,
   onBack,
+  onContinue,
 }: ProjectsSelectionContentProps) {
   // ids of the selected projects, in display order (first clicked = 1)
   const [selected, setSelected] = useState<string[]>(initialSelectedIds);
@@ -77,12 +79,12 @@ export function ProjectsSelectionContent({
   const [overIndex, setOverIndex] = useState<number | null>(null);
 
   const selectedProjects = selected.map(
-    (id) => projects.find((p) => p.id === id)!
+    (id) => projects.find((p) => p.id === id)!,
   );
 
   function toggleProject(id: string) {
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   }
 
@@ -107,6 +109,10 @@ export function ProjectsSelectionContent({
 
   return (
     <>
+      <TopNavbarPage4
+        onBack={onBack}
+        onContinue={() => onContinue?.(selected)}
+      />
       <main className="min-h-screen bg-[#F1F5F9] px-4 pb-8 pt-[174px] min-[768px]:ml-[210px] min-[768px]:px-6 min-[768px]:pt-[78px] min-[1024px]:ml-[240px]">
         <button
           type="button"
@@ -277,24 +283,41 @@ export function ProjectsSelectionContent({
   );
 }
 
-
 type TopNavbarPage4Props = {
   onBack?: () => void;
+  onContinue?: () => void;
 };
 
-export function TopNavbarPage4({ onBack }: TopNavbarPage4Props) {
-    return(
-        <>
-            <div className="fixed inset-x-0 top-0 z-30 hidden h-[55px] items-center justify-between border-b border-[#E5E7EB] bg-white px-8 min-[768px]:flex">
-                <button type="button" onClick={onBack} className="rounded-lg border border-[#E2E8F0] px-3 py-2 text-[13px] text-[#334155] transition-colors hover:bg-[#F8FAFC]">
-                 Back
-                </button>
-                <button type="button" className="my-2 inline-flex items-center gap-2 rounded-[9px] bg-linear-to-r from-[#6366F1] to-[#7C3AED] px-[14px] py-[7px] text-[13px] font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:shadow-[0_5px_12px_rgba(99,102,241,0.24)]">
-                  Next : Personal info <IoArrowForward />
-                </button>
-              </div>
-        </>
-    )
+export function TopNavbarPage4({ onBack, onContinue }: TopNavbarPage4Props) {
+  return (
+    <>
+      <div className="fixed inset-x-0 top-0 z-30 hidden h-[55px] items-center justify-between border-b border-[#E5E7EB] bg-white px-8 min-[768px]:flex">
+        <button
+          type="button"
+          onClick={onBack}
+          className="rounded-lg border border-[#E2E8F0] px-3 py-2 text-[13px] text-[#334155] transition-colors hover:bg-[#F8FAFC]"
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          onClick={onContinue}
+          className="my-2 inline-flex items-center gap-2 rounded-[9px] bg-linear-to-r from-[#6366F1] to-[#7C3AED] px-[14px] py-[7px] text-[13px] font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:shadow-[0_5px_12px_rgba(99,102,241,0.24)]"
+        >
+          Next: Skills <IoArrowForward />
+        </button>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 z-30 flex justify-end border-t border-[#E2E8F0] bg-white px-4 py-3 min-[768px]:hidden">
+        <button
+          type="button"
+          onClick={onContinue}
+          className="inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-[#6366F1] to-[#7C3AED] px-4 py-[9px] text-[13px] font-semibold text-white"
+        >
+          Next: Skills <IoArrowForward />
+        </button>
+      </div>
+    </>
+  );
 }
 
 type ProjectSelectionProps = ProjectsSelectionContentProps;
@@ -303,16 +326,16 @@ export default ProjectsSelectionContent;
 export function ProjectSelection({
   initialSelectedIds,
   onBack,
+  onContinue,
 }: ProjectSelectionProps) {
-    return (
-        <>
-
-        <TopNavbarPage4 onBack={onBack} />
-        <SideBar activeItem="projects" />
-        <ProjectsSelectionContent
-          initialSelectedIds={initialSelectedIds}
-          onBack={onBack}
-        />
-        </>
-    )
+  return (
+    <>
+      <SideBar activeItem="projects" activeRoute="projects" />
+      <ProjectsSelectionContent
+        initialSelectedIds={initialSelectedIds}
+        onBack={onBack}
+        onContinue={onContinue}
+      />
+    </>
+  );
 }

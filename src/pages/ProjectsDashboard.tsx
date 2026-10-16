@@ -1,4 +1,5 @@
 import { useState, type Dispatch, type SetStateAction } from "react";
+import { Link } from "react-router-dom";
 import { IoArrowForward } from "react-icons/io5";
 import projectsDashboardLogo from "../assets/LogoPartFarg.svg";
 import projectsDashboardAvatar from "../assets/Avatarpartfarg.svg";
@@ -138,8 +139,10 @@ export function TopNavbarPage3({
 
 export function SideBar({
   activeItem = "dashboard",
+  activeRoute = "dashboard",
 }: {
   activeItem?: "dashboard" | "projects";
+  activeRoute?: "dashboard" | "projects" | "builder" | "preview" | "publish";
 }) {
   return (
     <aside className="fixed left-0 top-[55px] z-20 h-[calc(100vh-55px)] w-[240px] overflow-y-auto border-r border-[#E5E7EB] bg-white px-[18px] py-6 max-[1023px]:w-[210px] max-[767px]:inset-x-0 max-[767px]:top-0 max-[767px]:h-auto max-[767px]:w-full max-[767px]:border-x-0 max-[767px]:border-b max-[767px]:px-4 max-[767px]:py-3 max-[767px]:shadow-[0_4px_14px_rgba(15,23,42,0.04)]">
@@ -152,31 +155,40 @@ export function SideBar({
         <li
           className={`my-[3px] rounded-[9px] px-[10px] py-[7px] text-[13px] max-[767px]:m-0 max-[767px]:px-[8px] max-[767px]:py-[6px] max-[767px]:text-[12px] ${activeItem === "dashboard" ? "bg-[#F5F3FF] font-semibold text-[#6D28D9]" : "font-medium text-[#475569] transition-colors duration-200 hover:bg-[#F5F3FF] hover:font-semibold hover:text-[#6D28D9] motion-reduce:transition-none"}`}
         >
-          <a className="text-inherit no-underline" href="">
+          <Link className="text-inherit no-underline" to="/dashboard">
             DashBoard
-          </a>
+          </Link>
         </li>
         <li
           className={`my-[3px] rounded-[9px] px-[10px] py-[7px] text-[13px] max-[767px]:m-0 max-[767px]:px-[8px] max-[767px]:py-[6px] max-[767px]:text-[12px] ${activeItem === "projects" ? "bg-[#F5F3FF] font-semibold text-[#6D28D9]" : "font-medium text-[#475569] transition-colors duration-200 hover:bg-[#F5F3FF] hover:font-semibold hover:text-[#6D28D9] motion-reduce:transition-none"}`}
         >
-          <a className="text-inherit no-underline" href="">
+          <Link className="text-inherit no-underline" to="/builder-projects">
             Projects
-          </a>
+          </Link>
         </li>
-        <li className="my-[3px] rounded-[9px] px-[10px] py-[7px] text-[13px] font-medium text-[#475569] transition-colors duration-200 hover:bg-[#F5F3FF] hover:font-semibold hover:text-[#6D28D9] max-[767px]:m-0 max-[767px]:px-[8px] max-[767px]:py-[6px] max-[767px]:text-[12px] motion-reduce:transition-none">
-          <a className="text-inherit no-underline" href="">
+        <li
+          className={`my-[3px] rounded-[9px] px-[10px] py-[7px] text-[13px] font-medium text-[#475569] transition-colors duration-200 hover:bg-[#F5F3FF] hover:font-semibold hover:text-[#6D28D9] max-[767px]:m-0 max-[767px]:px-[8px] max-[767px]:py-[6px] max-[767px]:text-[12px] motion-reduce:transition-none ${activeRoute === "builder" ? "bg-[#F5F3FF] font-semibold text-[#6D28D9]" : ""}`}
+        >
+          <Link
+            className="text-inherit no-underline"
+            to="/builder-personal-info"
+          >
             Portfolio Builder
-          </a>
+          </Link>
         </li>
-        <li className="my-[3px] rounded-[9px] px-[10px] py-[7px] text-[13px] font-medium text-[#475569] transition-colors duration-200 hover:bg-[#F5F3FF] hover:font-semibold hover:text-[#6D28D9] max-[767px]:m-0 max-[767px]:px-[8px] max-[767px]:py-[6px] max-[767px]:text-[12px] motion-reduce:transition-none">
-          <a className="text-inherit no-underline" href="">
+        <li
+          className={`my-[3px] rounded-[9px] px-[10px] py-[7px] text-[13px] font-medium text-[#475569] transition-colors duration-200 hover:bg-[#F5F3FF] hover:font-semibold hover:text-[#6D28D9] max-[767px]:m-0 max-[767px]:px-[8px] max-[767px]:py-[6px] max-[767px]:text-[12px] motion-reduce:transition-none ${activeRoute === "preview" ? "bg-[#F5F3FF] font-semibold text-[#6D28D9]" : ""}`}
+        >
+          <Link className="text-inherit no-underline" to="/preview">
             Live preview
-          </a>
+          </Link>
         </li>
-        <li className="my-[3px] rounded-[9px] px-[10px] py-[7px] text-[13px] font-medium text-[#475569] transition-colors duration-200 hover:bg-[#F5F3FF] hover:font-semibold hover:text-[#6D28D9] max-[767px]:m-0 max-[767px]:px-[8px] max-[767px]:py-[6px] max-[767px]:text-[12px] motion-reduce:transition-none">
-          <a className="text-inherit no-underline" href="">
+        <li
+          className={`my-[3px] rounded-[9px] px-[10px] py-[7px] text-[13px] font-medium text-[#475569] transition-colors duration-200 hover:bg-[#F5F3FF] hover:font-semibold hover:text-[#6D28D9] max-[767px]:m-0 max-[767px]:px-[8px] max-[767px]:py-[6px] max-[767px]:text-[12px] motion-reduce:transition-none ${activeRoute === "publish" ? "bg-[#F5F3FF] font-semibold text-[#6D28D9]" : ""}`}
+        >
+          <Link className="text-inherit no-underline" to="/publish">
             Publish
-          </a>
+          </Link>
         </li>
       </ul>
     </aside>

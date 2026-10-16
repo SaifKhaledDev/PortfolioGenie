@@ -1,10 +1,17 @@
+import { Link } from "react-router-dom";
+
 const features = [
   "Full project source",
   "Runs locally with npm",
   "No account or lock-in",
 ];
 
-const tabs = ["Dashboard", "Projects", "Portfolio builder", "Live preview"];
+const tabs = [
+  { label: "Dashboard", to: "/dashboard" },
+  { label: "Projects", to: "/builder-projects" },
+  { label: "Portfolio builder", to: "/builder-personal-info" },
+  { label: "Live preview", to: "/preview" },
+];
 
 export default function ExportPublish() {
   return (
@@ -13,7 +20,12 @@ export default function ExportPublish() {
         <div className="mx-auto flex w-full max-w-6xl flex-col md:flex-row md:items-center md:gap-10">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-violet-primary)] to-[var(--color-blue-secondary)] text-[var(--color-white-pure)] md:h-9 md:w-9">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
                 <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" />
               </svg>
             </div>
@@ -24,31 +36,31 @@ export default function ExportPublish() {
 
           <nav className="mt-3 flex flex-wrap gap-x-1 gap-y-1 text-xs font-medium text-[var(--color-slate-600-medium)] md:mt-0 md:text-sm">
             {tabs.map((tab) => (
-              <a
-                key={tab}
-                href="#"
+              <Link
+                key={tab.to}
+                to={tab.to}
                 className="rounded-lg px-3 py-2 hover:text-[var(--color-violet-primary)]"
               >
-                {tab}
-              </a>
+                {tab.label}
+              </Link>
             ))}
-            <a
-              href="#"
+            <Link
+              to="/publish"
               className="rounded-lg bg-[image:var(--gradient-subtle)] px-3 py-2 font-semibold text-[var(--color-violet-primary)]"
             >
               Publish
-            </a>
+            </Link>
           </nav>
         </div>
       </header>
 
       <main className="mx-auto w-full max-w-6xl px-4 py-5 md:px-8 md:py-10">
-        <a
-          href="#"
+        <Link
+          to="/preview"
           className="text-xs text-[var(--color-slate-600-medium)] hover:text-[var(--color-violet-primary)] md:text-sm"
         >
           Back to preview
-        </a>
+        </Link>
 
         <h1 className="mt-5 text-2xl font-bold text-[var(--color-slate-900-darkest)] md:text-4xl">
           Take your portfolio live
