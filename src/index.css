@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+body {
+  font-family: "Manrope", sans-serif;
+}
+
 :root {
     /* ==========================================
        الألوان الأساسية للعلامة التجارية (Brand Colors)
@@ -60,3 +64,5 @@
     --color-border: #334155;                           /* حدود داكنة تتناسب مع الوضع الليلي */
     --gradient-subtle: linear-gradient(180deg, rgba(99, 102, 241, 0.15) 0%, rgba(15, 23, 42, 0) 100%); /* تعديل التدرج الخفيف ليناسب الدارك مود */
 }
+
+/*  */
